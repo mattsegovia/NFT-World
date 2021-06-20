@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   uuid: ^3.0.4
+  carousel_slider: ^4.0.0
   flutter:
     sdk: flutter
 

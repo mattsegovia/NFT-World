@@ -36,7 +36,6 @@ class _SearchPageState extends State<SearchPage> {
                 child: Container(
                   margin: Constants.APP_LOGO_MARGIN,
                   alignment: Alignment.bottomCenter,
-                  // color: Constants.APP_HEADER_BG_COLOR,
                   child: Constants.APP_LOGO,
                 )
             ),
