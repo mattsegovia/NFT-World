@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Constants {
   // Upper Level Design
   static const Image APP_LOGO = Image(image: AssetImage('assets/Logo1.png'));
-  static const EdgeInsets APP_LOGO_MARGIN = EdgeInsets.symmetric(horizontal: 40.0);
+  static const EdgeInsets APP_LOGO_MARGIN = EdgeInsets.fromLTRB(40, 70, 40, 25);
   static const Color APP_MAIN_BG_COLOR = Colors.white;
   static const Color APP_BODY_BG_COLOR = Colors.white;
   static const Color APP_NAV_BG_COLOR = Colors.white;
