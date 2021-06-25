@@ -5,14 +5,14 @@ class NFT {
 
   // double priceUSD;
   // store different prices
-  late String prices;
+  // late String prices;
 
   // store creator details
-  late String creator;
+  // late String creator;
   // String creatorURL;
   // String creatorProfileImage;
 
-  late String collection;
+  // late String collection;
 
-  NFT();
+  NFT(this.title, this.imageURL, this.permalink);
 }

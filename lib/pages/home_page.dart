@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nft_wrld/constants/constants.dart';
+import 'package:nft_wrld/models/NFT.dart';
 import 'package:nft_wrld/models/User.dart';
 import 'package:nft_wrld/pages/account_page.dart';
 import 'package:nft_wrld/pages/portfolio_page.dart';
 import 'package:nft_wrld/pages/search_page.dart';
-import 'package:nft_wrld/utils/api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,72 +23,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String baseURL = 'https://api.opensea.io/api/v1/';
-
-  var _imgList = [];
-  var _imgList2 = [];
-  // List _imgUrls = [];
-
-  Future<List> getFeaturedData() async {
-    List<String> imgList = [];
-
-    var url = Uri.parse(baseURL + 'bundles?on_sale=true&limit=10&offset=0');
-    var response = await http.get(url);
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
-    
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      final bundles = responseBody["bundles"];
-      // print(responseBody["bundles"][0]["assets"][0]["image_url"]);
-
-      for(var i = 0; i< bundles.length; i++) {
-        // grab first image from each bundle
-        var imgUrl = bundles[i]["assets"][0]["image_url"];
-        if (imgUrl.contains('.mp4')) {
-          imgUrl = bundles[i]["assets"][0]["collection"]["featured_image_url"];
-        }
-        if(imgUrl != null && imgUrl.length > 1) {
-          imgList.add(imgUrl);
-        }
-      }
-    }
-    print(imgList);
-    return imgList;
-  }
-
-  Future<List> getHomeData() async {
-    List<String> imgList = [];
-
-    var url = Uri.parse(baseURL + 'assets?order_direction=desc&offset=0&limit=20');
-    var response = await http.get(url);
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      final assets = responseBody["assets"];
-      // print(responseBody["bundles"][0]["assets"][0]["image_url"]);
-
-      for(var i = 0; i< assets.length; i++) {
-        // grab first image from each bundle
-        var imgUrl = assets[i]["image_url"];
-        if (imgUrl.contains('.mp4')) {
-          imgUrl = assets[i]["image_preview_url"];
-        }
-
-        if(imgUrl != null && imgUrl.length > 1) {
-          imgList.add(imgUrl);
-        }
-      }
-    }
-
-    print(imgList);
-    return imgList;
-  }
-
+  var _featuredImgList = [];
+  var _homeImgList = [];
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+    TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -106,6 +46,71 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
   ];
+
+  Future<List> getFeaturedData() async {
+    List NFTList = [];
+
+    var url = Uri.parse(baseURL + 'bundles?on_sale=true&limit=10&offset=0');
+    var response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final bundles = responseBody["bundles"];
+
+      for(var i = 0; i< bundles.length; i++) {
+        // grab first image from each bundle
+        var title = bundles[i]["name"];
+        var imgUrl = bundles[i]["assets"][0]["image_url"];
+        var permalink = bundles[i]["permalink"];
+        if (imgUrl.contains('.mp4') || imgUrl.contains('.svg')) {
+          imgUrl = bundles[i]["assets"][0]["collection"]["featured_image_url"];
+        }
+        if(imgUrl != null && imgUrl.length > 1) {
+          NFTList.add(NFT(title, imgUrl, permalink));
+        }
+      }
+    }
+    return NFTList;
+  }
+
+  Future<List> getHomeData() async {
+    List NFTList = [];
+
+    var url = Uri.parse(baseURL + 'assets?order_direction=desc&offset=0&limit=20');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final assets = responseBody["assets"];
+
+      for(var i = 0; i< assets.length; i++) {
+        var title = assets[i]["name"];
+        var imgUrl = assets[i]["image_url"];
+        var permalink = assets[i]["permalink"];
+        if (imgUrl.contains('.mp4') || imgUrl.contains('.svg')) {
+          imgUrl = assets[i]["collection"]["image_url"];
+        }
+        if(imgUrl != null && imgUrl.length > 1) {
+          // add attributes to NFT obj here
+          NFTList.add(NFT(title, imgUrl, permalink));
+        }
+      }
+    }
+    return NFTList;
+  }
+
+  Future<void> _launchInWebViewWithJavaScript(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -129,7 +134,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
   void _goToSearch(){
     var user = new User('test@me.com');
     print(user.toString());
@@ -147,10 +151,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getFeaturedData().then((value) => {
-      getHomeData().then((value2) => {
-        setState(() => {
-        _imgList.addAll(value), _imgList2.addAll(value2)
-        })
+      _featuredImgList.addAll(value),
+    });
+
+    getHomeData().then((value2) => {
+      setState(() => {
+        _homeImgList.addAll(value2)
       })
     });
     super.initState();
@@ -159,20 +165,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Widget> imageSliders = _imgList
+    final List<Widget> imageSliders = _featuredImgList
         .map((item) => Container(
       child: GestureDetector(
-        onTap: () {
-          print('hello');
-          // open details page
-        },
+        onTap: () async => await _launchInWebViewWithJavaScript(item.permalink),
         child: Container(
           margin: EdgeInsets.all(5.0),
           child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               child: Stack(
                 children: <Widget>[
-                  Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                  Image.network(item.imageURL, fit: BoxFit.cover, width: 1000.0),
                   Positioned(
                     bottom: 0.0,
                     left: 0.0,
@@ -191,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       child: Text(
-                        'NFT ${_imgList.indexOf(item)}',
+                        '${item.title}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
@@ -208,20 +211,18 @@ class _HomePageState extends State<HomePage> {
         .toList();
 
 
-    final List<Widget> imageSliders2 = _imgList2
+    final List<Widget> imageSliders2 = _homeImgList
         .map((item) => Container(
       child: GestureDetector(
-        onTap: () {
-          print('hello 2');
-          // go to details page
-        },
+        // go to details page
+        onTap: () async => await _launchInWebViewWithJavaScript(item.permalink),
         child: Container(
           margin: EdgeInsets.all(5.0),
           child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
               child: Stack(
                 children: <Widget>[
-                  Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                  Image.network(item.imageURL, fit: BoxFit.cover, width: 1000.0),
                   Positioned(
                     bottom: 0.0,
                     left: 0.0,
@@ -240,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       child: Text(
-                        'NFT ${_imgList2.indexOf(item)}',
+                        '${item.title}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
@@ -294,7 +295,6 @@ class _HomePageState extends State<HomePage> {
               // decoration: BoxDecoration(
               //     border: Border.all(color: Colors.blueAccent)
               // ),
-
               padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
               child: Row(children: [
                 Text('NFTs',
@@ -310,7 +310,6 @@ class _HomePageState extends State<HomePage> {
               // decoration: BoxDecoration(
               //     border: Border.all(color: Colors.blueAccent)
               // ),
-
               // padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
               child: Column(children: imageSliders2),
             ),
