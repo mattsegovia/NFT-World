@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
 
     super.initState();
     getCollectionsData().then((value) => {
-      setState(() => {
+      if (mounted) setState(() => {
         _nftList.addAll(value),
       })
     });
@@ -39,20 +39,19 @@ class _SearchPageState extends State<SearchPage> {
   Future<List> getCollectionsData() async {
     List NFTList = [];
 
-    var url = Uri.parse(baseURL + 'https://api.opensea.io/api/v1/collections?offset=0&limit=50');
+    var url = Uri.parse(baseURL + 'collections?offset=0&limit=10');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       final collections = responseBody["collections"];
-      print(collections);
-
+      // print(collections);
       for(var i = 0; i< collections.length; i++) {
-        print(collections);
         var title = collections[i]["name"];
         var imgUrl = collections[i]["image_url"];
-        var permalink = "https://api.opensea.io/api/v1/assets?order_direction=desc&offset=0&limit=20&collection=" + collections[i]["slug"];
-        if (imgUrl.contains('.mp4') || imgUrl.contains('.svg')) {
+        var permalink = "https://opensea.io/collection/" + collections[i]["slug"];
+        // print(imgUrl);
+        if (imgUrl == null || imgUrl.contains('.mp4') || imgUrl.contains('.svg')) {
           imgUrl = "https://t3.ftcdn.net/jpg/04/24/48/50/360_F_424485038_Nuts0TtEXpV0XhquEIOcqdn1XQeb63ZK.jpg";
         }
         if(imgUrl != null && imgUrl.length > 1) {
@@ -133,29 +132,9 @@ class _SearchPageState extends State<SearchPage> {
                 child: Constants.APP_LOGO,
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(40, 0, 40, 10),
-                child: Row(children: [
-                  Text('Featured',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
-                    ),
-                  ),
-                ]),
-              ),
-              Text('Search Content | Collections'),
-              // CarouselSlider(
-              //   options: CarouselOptions(
-              //     autoPlay: true,
-              //     aspectRatio: 2.0,
-              //     enlargeCenterPage: true,
-              //   ),
-              //   items: imageSliders,
-              // ),
-              Container(
                 padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
                 child: Row(children: [
-                  Text('NFTs',
+                  Text('Collections',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20

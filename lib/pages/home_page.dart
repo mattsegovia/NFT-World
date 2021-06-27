@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
+    if (mounted) setState(() {
       _selectedIndex = index;
     });
   }
@@ -135,12 +135,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getFeaturedData().then((value) => {
-      setState(() => {
+      if (mounted) setState(() => {
         _featuredImgList.addAll(value),
       })
     });
     getHomeData().then((value2) => {
-      setState(() => {
+      if (mounted) setState(() => {
         _homeImgList.addAll(value2)
       })
     });

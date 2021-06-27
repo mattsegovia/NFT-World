@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
             activeIcon: Icon(Icons.search, color: Constants.APP_NAV_COLOR_SELECT_ACTIVE),
-            label: 'Search',
+            label: 'Explore',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.show_chart, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
