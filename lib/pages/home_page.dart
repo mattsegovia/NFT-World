@@ -116,27 +116,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-
-    switch (_selectedIndex) {
-      case 0:
-        break;
-      case 1:
-        _goToSearch();
-        break;
-      case 2:
-        _goToPortfolio();
-        break;
-      case 3:
-        _goToAccount();
-        break;
-      default:
-        break;
-    }
   }
 
   void _goToSearch(){
-    var user = new User('test@me.com');
-    print(user.toString());
+    // var user = new User('test@me.com');
+    // print(user.toString());
     Navigator.push(context, PageRouteBuilder(pageBuilder: (_, __, ___) => SearchPage()),);
   }
 
@@ -151,9 +135,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getFeaturedData().then((value) => {
-      _featuredImgList.addAll(value),
+      setState(() => {
+        _featuredImgList.addAll(value),
+      })
     });
-
     getHomeData().then((value2) => {
       setState(() => {
         _homeImgList.addAll(value2)
@@ -164,7 +149,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     final List<Widget> imageSliders = _featuredImgList
         .map((item) => Container(
       child: GestureDetector(
@@ -209,7 +193,6 @@ class _HomePageState extends State<HomePage> {
       ),
     ))
         .toList();
-
 
     final List<Widget> imageSliders2 = _homeImgList
         .map((item) => Container(
@@ -257,10 +240,7 @@ class _HomePageState extends State<HomePage> {
     ))
         .toList();
 
-
-    return Scaffold(
-      backgroundColor: Constants.APP_MAIN_BG_COLOR,
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -268,7 +248,6 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.bottomCenter,
               child: Constants.APP_LOGO,
             ),
-
             Container(
               padding: EdgeInsets.fromLTRB(40, 0, 40, 10),
               child: Row(children: [
@@ -280,7 +259,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ]),
             ),
-
             CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
@@ -289,8 +267,6 @@ class _HomePageState extends State<HomePage> {
               ),
               items: imageSliders,
             ),
-
-
             Container(
               // decoration: BoxDecoration(
               //     border: Border.all(color: Colors.blueAccent)
@@ -313,33 +289,8 @@ class _HomePageState extends State<HomePage> {
               // padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
               child: Column(children: imageSliders2),
             ),
-        ]
+          ]
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Constants.APP_NAV_COLOR_SELECT_ACTIVE),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
-            label: 'Portfolio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
-            label: 'Account',
-          ),
-
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal,
-        onTap: _onItemTapped,
-      ),
     );
   }
 
