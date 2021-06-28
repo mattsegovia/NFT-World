@@ -2,9 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nft_wrld/constants/constants.dart';
-import 'package:nft_wrld/pages/account_page.dart';
-import 'package:nft_wrld/pages/home_page.dart';
-import 'package:nft_wrld/pages/portfolio_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -17,8 +14,6 @@ class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
-
-
 
 class _SearchPageState extends State<SearchPage> {
   String baseURL = 'https://api.opensea.io/api/v1/';
@@ -51,6 +46,9 @@ class _SearchPageState extends State<SearchPage> {
         var imgUrl = collections[i]["image_url"];
         var permalink = "https://opensea.io/collection/" + collections[i]["slug"];
         // print(imgUrl);
+        if (title  == null || title == "") {
+          title = "N/A";
+        }
         if (imgUrl == null || imgUrl.contains('.mp4') || imgUrl.contains('.svg')) {
           imgUrl = "https://t3.ftcdn.net/jpg/04/24/48/50/360_F_424485038_Nuts0TtEXpV0XhquEIOcqdn1XQeb63ZK.jpg";
         }

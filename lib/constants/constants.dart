@@ -10,6 +10,7 @@ class Constants {
   static const int APP_HEADER_FLEX = 13;
   static const int APP_BODY_FLEX = 70;
   static const int APP_NAV_FLEX = 7;
+  static const Image API_LOGO = Image(image: AssetImage('assets/opensea-logo-full-colored-blue.png'));
 
   // Nav Bar Flex Settings
   static const Color APP_NAV_COLOR_SELECT_ACTIVE = Colors.teal;

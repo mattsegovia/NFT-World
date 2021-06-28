@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.show_chart, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
             activeIcon: Icon(Icons.show_chart, color: Constants.APP_NAV_COLOR_SELECT_ACTIVE),
-            label: 'Portfolio',
+            label: 'Offers',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
