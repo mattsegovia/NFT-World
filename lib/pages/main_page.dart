@@ -62,9 +62,9 @@ class _MainPageState extends State<MainPage> {
             label: 'Offers',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
-            activeIcon: Icon(Icons.account_circle, color: Constants.APP_NAV_COLOR_SELECT_ACTIVE),
-            label: 'Account',
+            icon: Icon(Icons.info_outline, color: Constants.APP_NAV_COLOR_SELECT_INACTIVE),
+            activeIcon: Icon(Icons.info_outline, color: Constants.APP_NAV_COLOR_SELECT_ACTIVE),
+            label: 'Info',
           ),
         ],
         currentIndex: _selectedIndex,

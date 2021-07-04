@@ -136,7 +136,7 @@ class _AccountPageState extends State<AccountPage> {
             Container(
               padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
               child: Row(children: [
-                Text('Account',
+                Text('Info',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20
@@ -152,23 +152,6 @@ class _AccountPageState extends State<AccountPage> {
               margin: EdgeInsets.symmetric(horizontal: 70, vertical: 0),
               child: Constants.API_LOGO,
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 200, 0, 0),
-              child: ElevatedButton(
-                  onPressed: onPressed,
-                  child: Text('Log Out', style: TextStyle(
-                      color: Colors.red
-                  )),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                      textStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
-                ),
-            ),
-
-
           ]
       ),
     );

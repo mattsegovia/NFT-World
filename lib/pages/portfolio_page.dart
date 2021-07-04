@@ -21,8 +21,6 @@ class _PortfolioPageState extends State<PortfolioPage> {
 
   @override
   void initState() {
-    print('init run');
-
     super.initState();
     getCollectionsData().then((value) => {
       if (mounted) setState(() => {

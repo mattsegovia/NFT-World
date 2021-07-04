@@ -3,8 +3,16 @@ import 'package:nft_wrld/pages/home_page.dart';
 import 'package:nft_wrld/pages/main_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(new MaterialApp(
+    home: new MainPage(),
+    // routes: <String, WidgetBuilder> {
+    //   '/app': (BuildContext context) => new MyAppPage()
+    // },
+  ));
 }
+// void main() {
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
