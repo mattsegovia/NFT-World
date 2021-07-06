@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   uuid: ^3.0.4
+  flutter_launcher_icons: ^0.9.0
   carousel_slider: ^4.0.0
   http: ^0.13.3
   url_launcher: ^6.0.7
@@ -39,6 +40,10 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/launcher_icon.png"
 
 # The following section is specific to Flutter.
 flutter:
